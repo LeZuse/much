@@ -1,0 +1,48 @@
+#!/usr/bin/python
+
+import os
+import re
+import time
+import sys
+import thread
+import commands
+import glob
+
+from threading import Thread
+from optparse import OptionParser
+
+parser = OptionParser(description="\
+Very useful script for keeping your Git repos in `~/Projects` clean and up-to-date. \
+Looks for Git repositories and runs commands effectively (in parallel).")
+
+(options, args) = parser.parse_args()
+
+class thread_it(Thread):
+    def __init__ (self,param):
+        Thread.__init__(self)
+        self.param = param
+    def run(self):
+
+        try:
+          if os.path.exists(os.path.join(self.param, '.git')):
+            out = commands.getoutput('cd '+ str(self.param) + '; git status')
+
+            lock.acquire()
+            output.append(out)
+            lock.release()
+        except:
+          pass
+
+threads = []
+output = []
+lock = thread.allocate_lock()
+
+for j in glob.glob( os.path.join(os.path.abspath('./'), '*') ):
+    current = thread_it(j)
+    threads.append(current)
+    current.start()
+
+for t in threads:
+    t.join()
+
+print output
