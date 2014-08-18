@@ -29,6 +29,11 @@ class thread_it(Thread):
 
             lock.acquire()
             output.append(out)
+            if 'nothing to commit, working directory clean' in out:
+              sys.stdout.write('.')
+            else:
+              sys.stdout.write('\x1b[;31m!\x1b[0m')
+            sys.stdout.flush()
             lock.release()
         except:
           pass
