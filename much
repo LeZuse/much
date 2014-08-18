@@ -15,6 +15,10 @@ parser = OptionParser(description="\
 Very useful script for keeping your Git repos in `~/Projects` clean and up-to-date. \
 Looks for Git repositories and runs commands effectively (in parallel).")
 
+parser.add_option('-v', '--verbose',
+                  action='store_true',
+                  default=False,
+                  )
 (options, args) = parser.parse_args()
 
 class thread_it(Thread):
@@ -32,7 +36,10 @@ class thread_it(Thread):
             if 'nothing to commit, working directory clean' in out:
               sys.stdout.write('.')
             else:
-              sys.stdout.write('\x1b[;31m!\x1b[0m')
+              if options.verbose:
+                sys.stdout.write('\x1b[;31mDIRTY('+ str(self.param) + ')\x1b[0m')
+              else:
+                sys.stdout.write('\x1b[;31m!\x1b[0m')
             sys.stdout.flush()
             lock.release()
         except:
