@@ -13,3 +13,4 @@ Please ensure you have `/usr/local/bin` in your `$PATH`
 - Check remote updates and never worry about deleting your local repos again.
 - Better output formatting.
 - Add subcommands for checking: clean, branches, remotes, stashes
+- Make own Homebrew tap
